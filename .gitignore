@@ -1,0 +1,128 @@
+# ============================================
+# FantaBid — Monorepo .gitignore
+# Node.js (server) + Angular (web) + Flutter (mobile)
+# ============================================
+
+# ---------- OS ----------
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+
+# ---------- IDE ----------
+.idea/
+.vscode/
+*.iml
+*.code-workspace
+
+# ---------- Environment ----------
+.env
+.env.*
+!.env.example
+
+# ============================================
+# NODE.JS / SERVER
+# ============================================
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.turbo/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Coverage
+coverage/
+.nyc_output/
+
+# ============================================
+# ANGULAR / WEB
+# ============================================
+web/.angular/
+web/dist/
+web/.sass-cache/
+web/connect.lock
+web/libpeerconnection.log
+web/testem.log
+
+# ============================================
+# FLUTTER / MOBILE
+# ============================================
+
+# Miscellaneous
+mobile/*.class
+mobile/*.lock
+mobile/*.log
+mobile/*.pyc
+mobile/*.swp
+mobile/.atom/
+mobile/.buildlog/
+mobile/.history
+mobile/.svn/
+
+# IntelliJ
+mobile/*.iml
+mobile/*.ipr
+mobile/*.iws
+mobile/.idea/
+
+# Flutter/Dart
+mobile/.dart_tool/
+mobile/.flutter-plugins
+mobile/.flutter-plugins-dependencies
+mobile/.packages
+mobile/.pub-cache/
+mobile/.pub/
+mobile/build/
+mobile/.metadata
+
+# Android
+mobile/android/.gradle/
+mobile/android/app/debug/
+mobile/android/app/profile/
+mobile/android/app/release/
+mobile/android/local.properties
+mobile/android/**/GeneratedPluginRegistrant.java
+mobile/android/key.properties
+mobile/android/**/*.keystore
+!mobile/android/app/debug.keystore
+
+# iOS
+mobile/ios/Pods/
+mobile/ios/.symlinks/
+mobile/ios/Flutter/Flutter.framework
+mobile/ios/Flutter/Flutter.podspec
+mobile/ios/Flutter/Generated.xcconfig
+mobile/ios/Flutter/ephemeral/
+mobile/ios/Flutter/app.flx
+mobile/ios/Flutter/app.zip
+mobile/ios/Flutter/flutter_assets/
+mobile/ios/Flutter/flutter_export_environment.sh
+mobile/ios/ServiceDefinitions.json
+mobile/ios/Runner/GeneratedPluginRegistrant.*
+mobile/ios/**/*.mode1v3
+mobile/ios/**/*.mode2v3
+mobile/ios/**/*.moved-aside
+mobile/ios/**/*.pbxuser
+mobile/ios/**/*.perspectivev3
+mobile/ios/**/*sync/
+mobile/ios/**/.sconsign.dblite
+mobile/ios/**/.tags*
+mobile/ios/**/DerivedData/
+mobile/ios/**/Pods/
+mobile/ios/**/profile
+mobile/ios/**/xcuserdata
+mobile/ios/.generated/
+
+# Exceptions
+!mobile/ios/Podfile
+!mobile/ios/Podfile.lock
