@@ -28,16 +28,25 @@ export async function authMiddleware(
     return reply.code(401).send({ error: "Missing Bearer token" });
   }
 
+  // ... resto del codice uguale
+
   try {
-    // Verifica la firma del token usando il segreto condiviso
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    const decoded = jwt.verify(token, JWT_SECRET!) as any;
+    console.log("✅ Token valido per utente:", decoded.sub); // Log successo
 
     request.user = {
       id: decoded.sub,
       role: decoded.role,
       email: decoded.email,
     };
-  } catch (err) {
-    return reply.code(401).send({ error: "Invalid or expired token" });
+  } catch (err: any) {
+    // Aggiungi :any per leggere il messaggio
+    // STAMPA L'ERRORE REALE NEL TERMINALE
+    console.error("❌ Errore verifica JWT:", err.message);
+
+    // Manda i dettagli al frontend per capire meglio
+    return reply
+      .code(401)
+      .send({ error: "Invalid token", details: err.message });
   }
 }
