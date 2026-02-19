@@ -20,7 +20,12 @@ import {
           <h1 class="text-2xl font-bold">Setup Lega</h1>
           <p class="text-sm opacity-80">{{ league()?.name || 'Configurazione admin' }}</p>
         </div>
-        <button (click)="goToLobby()" class="rounded border px-4 py-2">Torna alla Lobby</button>
+        <div class="flex gap-2">
+          <button (click)="goToImport()" class="rounded bg-emerald-600 px-4 py-2 text-white">
+            Import Listone
+          </button>
+          <button (click)="goToLobby()" class="rounded border px-4 py-2">Torna alla Lobby</button>
+        </div>
       </header>
 
       @if (message()) {
@@ -254,6 +259,10 @@ export class LeagueSetupPageComponent {
 
   goToLobby() {
     this.router.navigateByUrl(`/league/${this.leagueId()}/lobby`);
+  }
+
+  goToImport() {
+    this.router.navigateByUrl(`/league/${this.leagueId()}/import`);
   }
 
   toNumber(value: string, fallback: number): number {

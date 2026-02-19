@@ -73,6 +73,42 @@ export type CreateLeaguePayload = {
   settings?: LeagueSettings;
 };
 
+export type ImportPreviewResponse = {
+  preview: {
+    total_rows: number;
+    excluded_fuori_lista: number;
+    importable: number;
+    available: number;
+    sold: number;
+    fanta_teams: Array<{
+      name: string;
+      players_count: number;
+      total_cost: number;
+    }>;
+    warnings: string[];
+    errors: Array<{
+      row: number;
+      message: string;
+    }>;
+  };
+};
+
+export type ImportConfirmPayload = {
+  team_mapping: Record<string, string | null>;
+  overwrite_existing: boolean;
+};
+
+export type ImportConfirmResponse = {
+  imported: {
+    total_players: number;
+    available: number;
+    sold: number;
+    members_updated: number;
+    unmapped_teams: string[];
+    unmapped_players_set_available: number;
+  };
+};
+
 @Injectable({
   providedIn: 'root',
 })
@@ -133,5 +169,25 @@ export class LeagueApiService {
     return this.http.patch<{ league: League }>(`${this.baseUrl}/${leagueId}`, {
       settings,
     });
+  }
+
+  importPlayersPreview(leagueId: string, file: File): Observable<ImportPreviewResponse> {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post<ImportPreviewResponse>(
+      `${this.baseUrl}/${leagueId}/players/import`,
+      formData,
+    );
+  }
+
+  importPlayersConfirm(
+    leagueId: string,
+    payload: ImportConfirmPayload,
+  ): Observable<ImportConfirmResponse> {
+    return this.http.post<ImportConfirmResponse>(
+      `${this.baseUrl}/${leagueId}/players/import/confirm`,
+      payload,
+    );
   }
 }

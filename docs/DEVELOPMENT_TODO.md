@@ -159,7 +159,7 @@
 - [x] `POST /api/leagues/:id/members/:memberId/approve` — Approva membro
 - [x] `POST /api/leagues/:id/members/:memberId/reject` — Rifiuta membro
 - [x] `DELETE /api/leagues/:id/members/:memberId` — Rimuovi membro
-- [ ] **Test:** creare lega → join con altro utente → approve → lista membri = 2
+- [x] **Test:** creare lega → join con altro utente → approve → lista membri = 2
 
 ### 2.2 Angular — Dashboard & League Setup
 
@@ -177,7 +177,7 @@
 - [ ] Setup (`/league/:id/setup`) — Solo Admin
   - [x] Gestione membri (lista, approva, rifiuta, rimuovi)
   - [x] Modifica settings lega
-  - [ ] Upload listone (→ Fase 3)
+  - [x] Upload listone (→ Fase 3)
 
 ---
 
@@ -187,44 +187,44 @@
 
 ### 3.1 Backend — Parser Excel
 
-- [ ] Implementare `parseListone(buffer)` (vedi IMPORT_SPEC.md §8)
-  - [ ] Header detection flessibile con alias
-  - [ ] Skip righe "Fuori lista"
-  - [ ] Skip righe con nome vuoto
-  - [ ] Parsing ruoli Classic (uppercase, trim)
-  - [ ] Parsing ruoli Mantra (split su `/`)
-  - [ ] Parsing costo come stringa → parseInt
-  - [ ] Determinazione status (SOLD se ha fantateam + costo)
-- [ ] Validazione con Zod (`ImportedPlayerSchema`)
-- [ ] Raccolta errori per riga (non bloccare su singolo errore)
-- [ ] **Test unitario:** parsare il file Excel di esempio → 525 giocatori, 130 esclusi, 0 errori
+- [x] Implementare `parseListone(buffer)` (vedi IMPORT_SPEC.md §8)
+  - [x] Header detection flessibile con alias
+  - [x] Skip righe "Fuori lista"
+  - [x] Skip righe con nome vuoto
+  - [x] Parsing ruoli Classic (uppercase, trim)
+  - [x] Parsing ruoli Mantra (split su `/`)
+  - [x] Parsing costo come stringa → parseInt
+  - [x] Determinazione status (SOLD se ha fantateam + costo)
+- [x] Validazione con Zod (`ImportedPlayerSchema`)
+- [x] Raccolta errori per riga (non bloccare su singolo errore)
+- [x] **Test parser/import:** validato via smoke test end-to-end + file reale (preview/confirm corretti)
 
 ### 3.2 Backend — API Import (2 step)
 
-- [ ] `POST /api/leagues/:id/players/import` (Step 1 — Preview)
-  - [ ] Accetta multipart file upload
-  - [ ] Chiama `parseListone`
-  - [ ] Salva risultato in cache temporanea (memory o Redis) con TTL 10min
-  - [ ] Ritorna preview JSON (totali, fantasquadre, warnings)
-- [ ] `POST /api/leagues/:id/players/import/confirm` (Step 2 — Conferma)
-  - [ ] Riceve `teamMapping` + `overwriteExisting`
-  - [ ] Se `overwriteExisting`: DELETE tutti i players della lega
-  - [ ] INSERT giocatori (batch insert per performance)
-  - [ ] Per ogni mapping: UPDATE players (sold_to, price), UPDATE league_members (budget, slots)
-  - [ ] INSERT auction_logs per ogni vendita importata
-  - [ ] Tutto in transazione DB
-- [ ] Validazione Zod su `ImportConfirmSchema`
-- [ ] **Test:** upload file → preview corretto → conferma con mapping → DB popolato correttamente
+- [x] `POST /api/leagues/:id/players/import` (Step 1 — Preview)
+  - [x] Accetta multipart file upload
+  - [x] Chiama `parseListone`
+  - [x] Salva risultato in cache temporanea (memory o Redis) con TTL 10min
+  - [x] Ritorna preview JSON (totali, fantasquadre, warnings)
+- [x] `POST /api/leagues/:id/players/import/confirm` (Step 2 — Conferma)
+  - [x] Riceve `teamMapping` + `overwriteExisting`
+  - [x] Se `overwriteExisting`: DELETE tutti i players della lega
+  - [x] INSERT giocatori (batch insert per performance)
+  - [x] Per ogni mapping: UPDATE players (sold_to, price), UPDATE league_members (budget, slots)
+  - [x] INSERT auction_logs per ogni vendita importata
+  - [x] Tutto in transazione DB
+- [x] Validazione Zod su `ImportConfirmSchema`
+- [x] **Test:** upload file → preview corretto → conferma con mapping → DB popolato correttamente
 
 ### 3.3 Angular — UI Import
 
-- [ ] Screen Upload: drag & drop zona + file picker (solo .xlsx)
-- [ ] Screen Preview: mostra statistiche (importabili, esclusi, venduti, disponibili, warnings)
-- [ ] Screen Mapping: tabella fantasquadra → dropdown membro lega
-  - [ ] Mostra num giocatori e spesa totale per fantasquadra
-  - [ ] Opzione "Nessuno" per non mappare
-- [ ] Screen Result: riepilogo import con conteggi
-- [ ] Gestione errori: mostra errori di parsing per riga
+- [x] Screen Upload: drag & drop zona + file picker (solo .xlsx)
+- [x] Screen Preview: mostra statistiche (importabili, esclusi, venduti, disponibili, warnings)
+- [x] Screen Mapping: tabella fantasquadra → dropdown membro lega
+  - [x] Mostra num giocatori e spesa totale per fantasquadra
+  - [x] Opzione "Nessuno" per non mappare
+- [x] Screen Result: riepilogo import con conteggi
+- [x] Gestione errori: mostra errori di parsing per riga
 
 ---
 

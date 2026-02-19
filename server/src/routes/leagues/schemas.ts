@@ -94,3 +94,10 @@ export const joinLeagueBodySchema = z
     password: z.string().min(4).max(72).optional(),
   })
   .strict();
+
+export const importConfirmBodySchema = z
+  .object({
+    team_mapping: z.record(z.string().min(1), z.uuid().nullable()),
+    overwrite_existing: z.boolean().default(false),
+  })
+  .strict();

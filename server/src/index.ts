@@ -1,4 +1,5 @@
 import cors from "@fastify/cors";
+import multipart from "@fastify/multipart";
 import dotenv from "dotenv";
 import Fastify from "fastify";
 import { Server as SocketIOServer } from "socket.io";
@@ -17,6 +18,13 @@ server.register(cors, {
   origin: corsOrigins,
   methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
+});
+
+server.register(multipart, {
+  limits: {
+    files: 1,
+    fileSize: 10 * 1024 * 1024,
+  },
 });
 
 const io = new SocketIOServer(server.server, {
