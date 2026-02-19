@@ -126,3 +126,6 @@ mobile/ios/.generated/
 # Exceptions
 !mobile/ios/Podfile
 !mobile/ios/Podfile.lock
+
+# AI
+.github

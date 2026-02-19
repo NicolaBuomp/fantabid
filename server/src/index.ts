@@ -1,13 +1,26 @@
 import cors from "@fastify/cors";
 import dotenv from "dotenv";
 import Fastify from "fastify";
+import { Server as SocketIOServer } from "socket.io";
 import { authMiddleware } from "./middleware/auth"; // Importa il middleware
+import { registerAuctionSocket } from "./socket/auction";
 
 dotenv.config();
 
 const server = Fastify({ logger: true });
+const corsOrigins = process.env.CORS_ORIGINS
+  ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
+  : ["http://localhost:4200"];
 
-server.register(cors, { origin: "*" });
+server.register(cors, { origin: corsOrigins });
+
+const io = new SocketIOServer(server.server, {
+  cors: {
+    origin: corsOrigins,
+  },
+});
+
+registerAuctionSocket(io);
 
 // Rotta pubblica
 server.get("/", async (req, reply) => {

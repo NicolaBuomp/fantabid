@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { createClient, Session, SupabaseClient } from '@supabase/supabase-js';
 import { BehaviorSubject, from, map } from 'rxjs';
-import { environment } from '../environments/environment.development';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -56,6 +56,18 @@ export class SupabaseService {
 
   signOut() {
     return from(this.supabase.auth.signOut());
+  }
+
+  resetPassword(email: string) {
+    return from(
+      this.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/login`,
+      }),
+    );
+  }
+
+  getCurrentSession$() {
+    return from(this.supabase.auth.getSession()).pipe(map(({ data }) => data.session));
   }
 
   // Metodo utile per l'Interceptor: ottieni il token corrente (o nullo)
