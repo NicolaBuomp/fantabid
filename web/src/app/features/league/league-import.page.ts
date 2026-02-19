@@ -134,6 +134,9 @@ import {
 
             @if (!preview()!.preview.fanta_teams.length) {
               <p class="text-sm opacity-80">Nessuna fantasquadra trovata nel file.</p>
+              <p class="mt-1 text-sm opacity-80">
+                Puoi comunque confermare: i giocatori verranno importati come disponibili.
+              </p>
             } @else {
               <div class="space-y-2">
                 @for (team of preview()!.preview.fanta_teams; track team.name) {
@@ -162,15 +165,15 @@ import {
                   </article>
                 }
               </div>
-
-              <button
-                (click)="confirmImport()"
-                [disabled]="confirmLoading()"
-                class="mt-4 rounded bg-emerald-600 px-4 py-2 text-white disabled:opacity-60"
-              >
-                {{ confirmLoading() ? 'Conferma in corso...' : 'Conferma Import' }}
-              </button>
             }
+
+            <button
+              (click)="confirmImport()"
+              [disabled]="confirmLoading()"
+              class="mt-4 rounded bg-emerald-600 px-4 py-2 text-white disabled:opacity-60"
+            >
+              {{ confirmLoading() ? 'Conferma in corso...' : 'Conferma Import' }}
+            </button>
           </section>
         }
 

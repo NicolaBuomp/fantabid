@@ -4,6 +4,7 @@ import { LoginPageComponent } from './features/auth/login.page';
 import { ResetPasswordPageComponent } from './features/auth/reset-password.page';
 import { SignupPageComponent } from './features/auth/signup.page';
 import { DashboardPageComponent } from './features/dashboard/dashboard.page';
+import { LeagueAuctionPageComponent } from './features/league/league-auction.page';
 import { LeagueCreatePageComponent } from './features/league/league-create.page';
 import { LeagueImportPageComponent } from './features/league/league-import.page';
 import { LeagueLobbyPageComponent } from './features/league/league-lobby.page';
@@ -36,6 +37,11 @@ export const appRoutes: Routes = [
   {
     path: 'league/:id/import',
     component: LeagueImportPageComponent,
+    canActivate: [authGuard],
+  },
+  {
+    path: 'league/:id/auction',
+    component: LeagueAuctionPageComponent,
     canActivate: [authGuard],
   },
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' },

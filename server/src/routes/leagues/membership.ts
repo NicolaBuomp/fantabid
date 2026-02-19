@@ -38,13 +38,19 @@ export async function registerLeagueMembershipRoutes(server: FastifyInstance) {
 
       const { data: league, error: leagueError } = await supabaseAdmin
         .from("leagues")
-        .select("id, access_type, password_hash, max_members")
+        .select("id, access_type, password_hash, max_members, settings")
         .eq("id", leagueId)
         .single();
 
       if (leagueError || !league) {
         return reply.code(404).send({ error: "LEAGUE_NOT_FOUND" });
       }
+
+      const leagueSettings = league.settings as Record<string, unknown>;
+      const baseBudget =
+        typeof leagueSettings?.base_budget === "number"
+          ? leagueSettings.base_budget
+          : 500;
 
       const targetStatus =
         league.access_type === "APPROVAL" ? "PENDING" : "APPROVED";
@@ -113,6 +119,8 @@ export async function registerLeagueMembershipRoutes(server: FastifyInstance) {
               user_id: request.user.id,
               role: "USER",
               status: targetStatus,
+              budget_initial: baseBudget,
+              budget_current: baseBudget,
             })
             .select("id, league_id, user_id, role, status, joined_at")
             .single();

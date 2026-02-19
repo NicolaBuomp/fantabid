@@ -62,6 +62,8 @@ export async function registerLeagueCrudRoutes(server: FastifyInstance) {
         return reply.code(500).send({ error: "LEAGUE_CREATE_FAILED" });
       }
 
+      const baseBudget = mergedSettings.base_budget ?? 500;
+
       const { error: memberError } = await supabaseAdmin
         .from("league_members")
         .insert({
@@ -69,6 +71,8 @@ export async function registerLeagueCrudRoutes(server: FastifyInstance) {
           user_id: request.user.id,
           status: "APPROVED",
           role: "ADMIN",
+          budget_initial: baseBudget,
+          budget_current: baseBudget,
         });
 
       if (memberError) {

@@ -20,6 +20,9 @@ import {
           <p class="text-sm opacity-80">{{ league()?.name || 'Dettaglio lega' }}</p>
         </div>
         <div class="flex gap-2">
+          <button (click)="goToAuction()" class="rounded bg-purple-600 px-4 py-2 text-white">
+            War Room
+          </button>
           @if (isAdmin()) {
             <button (click)="goToSetup()" class="rounded bg-blue-600 px-4 py-2 text-white">
               Setup
@@ -61,13 +64,15 @@ import {
 
                   @if (isAdmin() && member.role !== 'ADMIN') {
                     <div class="flex gap-2">
-                      <button
-                        (click)="approveMember(member)"
-                        [disabled]="loadingAction()"
-                        class="rounded bg-emerald-600 px-3 py-1 text-sm text-white disabled:opacity-60"
-                      >
-                        Approva
-                      </button>
+                      @if (member.status !== 'APPROVED') {
+                        <button
+                          (click)="approveMember(member)"
+                          [disabled]="loadingAction()"
+                          class="rounded bg-emerald-600 px-3 py-1 text-sm text-white disabled:opacity-60"
+                        >
+                          Approva
+                        </button>
+                      }
                       <button
                         (click)="rejectMember(member)"
                         [disabled]="loadingAction()"
@@ -167,6 +172,10 @@ export class LeagueLobbyPageComponent {
 
   goToSetup() {
     this.router.navigateByUrl(`/league/${this.leagueId()}/setup`);
+  }
+
+  goToAuction() {
+    this.router.navigateByUrl(`/league/${this.leagueId()}/auction`);
   }
 
   goDashboard() {
