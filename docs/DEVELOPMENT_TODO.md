@@ -66,10 +66,10 @@
   npm i @supabase/supabase-js socket.io-client
   npm i tailwindcss @tailwindcss/postcss postcss
   ```
-- [ ] Scegliere e installare UI library (PrimeNG o Angular Material)
+- [x] Scegliere e installare UI library (Tailwind CSS, senza PrimeNG/Material in v1)
 - [x] Configurare Tailwind CSS
 - [x] Configurare `environment.ts` / `environment.prod.ts` con `supabaseUrl`, `supabaseAnonKey`, `apiBaseUrl`, `wsBaseUrl`
-- [ ] Creare struttura cartelle:
+- [x] Creare struttura cartelle:
   ```
   web/src/app/
   ├── core/               # SupabaseService, AuthInterceptor, SocketService, Guards
@@ -109,24 +109,24 @@
 ### 1.2 Backend — JWT Middleware
 
 - [x] Implementare `authMiddleware` Fastify (vedi ARCHITECTURE.md §3)
-- [ ] Implementare middleware Socket.io per JWT validation
-- [ ] Implementare handler `token_refresh` per Socket.io
+- [x] Implementare middleware Socket.io per JWT validation
+- [x] Implementare handler `token_refresh` per Socket.io
 - [x] Configurare Supabase client con `service_role` key
-- [ ] Creare helper `getUserFromToken(token): { userId, role }`
+- [x] Creare helper `getUserFromToken(token): { userId, role }` (tramite `verifySupabaseJwt`)
 - [ ] **Test:** chiamata REST senza token → 401, con token valido → 200
 
 ### 1.3 Angular — Auth Flow
 
 - [x] Implementare `SupabaseService` (vedi ARCHITECTURE.md §3 — codice completo)
 - [x] Implementare `AuthInterceptor` (inietta JWT nelle chiamate al server)
-- [ ] Implementare `authGuard` (protezione route)
-- [ ] Creare pagine:
-  - [ ] `/login` — form email + password, bottone Google OAuth
-  - [ ] `/signup` — form email + password + username
-  - [ ] `/reset-password` — form email
-- [ ] Configurare routing con guard sulle rotte protette
-- [ ] Gestire redirect post-login (→ `/dashboard`)
-- [ ] Gestire redirect post-logout (→ `/login`)
+- [x] Implementare `authGuard` (protezione route)
+- [x] Creare pagine:
+  - [x] `/login` — form email + password
+  - [x] `/signup` — form email + password + username
+  - [x] `/reset-password` — form email
+- [x] Configurare routing con guard sulle rotte protette
+- [x] Gestire redirect post-login (→ `/dashboard`)
+- [x] Gestire redirect post-logout (→ `/login`)
 - [ ] **Test E2E:** signup → login → vedo dashboard → logout → redirect a login
 
 ### 1.4 Verifica end-to-end Web
@@ -143,21 +143,21 @@
 
 ### 2.1 Backend — API Leghe
 
-- [ ] `POST /api/leagues` — Crea lega (con settings di default)
-  - [ ] Crea anche il record `league_members` per l'admin (role=ADMIN, status=APPROVED)
-  - [ ] Validazione Zod su body (name, mode, access_type, settings)
-- [ ] `GET /api/leagues` — Lista leghe dell'utente (join su league_members)
-- [ ] `GET /api/leagues/:id` — Dettaglio lega (con lista membri)
-  - [ ] Middleware: verificare che utente è membro (o lega è OPEN)
-- [ ] `PATCH /api/leagues/:id` — Aggiorna settings
-  - [ ] Middleware: solo admin
-  - [ ] Validazione Zod su settings JSONB
-- [ ] `POST /api/leagues/:id/join` — Richiesta accesso
-  - [ ] Se OPEN → auto-approve
-  - [ ] Se PASSWORD → verifica bcrypt hash
-  - [ ] Se APPROVAL → status = PENDING
-- [ ] `POST /api/leagues/:id/members/:memberId/approve` — Approva membro
-- [ ] `POST /api/leagues/:id/members/:memberId/reject` — Rifiuta membro
+- [x] `POST /api/leagues` — Crea lega (con settings di default)
+  - [x] Crea anche il record `league_members` per l'admin (role=ADMIN, status=APPROVED)
+  - [x] Validazione Zod su body (name, mode, access_type, settings)
+- [x] `GET /api/leagues` — Lista leghe dell'utente (join su league_members)
+- [x] `GET /api/leagues/:id` — Dettaglio lega (con lista membri)
+  - [x] Middleware: verificare che utente è membro (o lega è OPEN)
+- [x] `PATCH /api/leagues/:id` — Aggiorna settings
+  - [x] Middleware: solo admin
+  - [x] Validazione Zod su settings JSONB
+- [x] `POST /api/leagues/:id/join` — Richiesta accesso
+  - [x] Se OPEN → auto-approve
+  - [x] Se PASSWORD → verifica bcrypt hash
+  - [x] Se APPROVAL → status = PENDING
+- [x] `POST /api/leagues/:id/members/:memberId/approve` — Approva membro
+- [x] `POST /api/leagues/:id/members/:memberId/reject` — Rifiuta membro
 - [ ] **Test:** creare lega → join con altro utente → approve → lista membri = 2
 
 ### 2.2 Angular — Dashboard & League Setup
@@ -234,16 +234,16 @@
 
 ### 4.1 Backend — Socket.io Setup
 
-- [ ] Configurare Socket.io con namespace `/auction`
-- [ ] Implementare middleware auth JWT sul namespace
-- [ ] Implementare handler `join_room`:
+- [x] Configurare Socket.io con namespace `/auction`
+- [x] Implementare middleware auth JWT sul namespace
+- [x] Implementare handler `join_room`:
   - [ ] Verifica utente è membro APPROVED della lega
   - [ ] Aggiunge socket alla room `league_{leagueId}`
   - [ ] Carica membri dal DB nella cache in-memory (se non già caricati)
   - [ ] Emette `auction_state` con stato corrente completo
   - [ ] Emette `server_time` per latency compensation
   - [ ] Broadcast `member_connected` alla room
-- [ ] Implementare handler `disconnect`:
+- [x] Implementare handler `disconnect`:
   - [ ] Aggiorna `connected: false` nella cache
   - [ ] Broadcast `member_disconnected`
 
@@ -256,7 +256,7 @@
 
 ### 4.3 Backend — Admin Controls
 
-- [ ] `admin_start_player`:
+- [x] `admin_start_player` (implementazione base con mock):
   - [ ] Verifica role === ADMIN
   - [ ] Verifica stato === IDLE
   - [ ] Carica player dal DB, verifica status === AVAILABLE o SKIPPED
@@ -291,7 +291,7 @@
   - [ ] Rate limiting check (500ms)
   - [ ] Aggiornamento roomState
   - [ ] Calcolo timer con decay (vedi ARCHITECTURE.md §9)
-- [ ] Handler Socket `place_bid`:
+- [x] Handler Socket `place_bid` (implementazione base con mock):
   - [ ] Chiama processBid
   - [ ] Se successo → broadcast `bid_update`
   - [ ] Se errore → emit `bid_error` solo al sender

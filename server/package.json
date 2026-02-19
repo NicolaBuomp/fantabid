@@ -16,6 +16,7 @@
     "@fastify/multipart": "^9.4.0",
     "@fastify/rate-limit": "^10.3.0",
     "@supabase/supabase-js": "^2.95.3",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.2.4",
     "fastify": "^5.7.4",
     "jsonwebtoken": "^9.0.3",

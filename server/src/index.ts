@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import Fastify from "fastify";
 import { Server as SocketIOServer } from "socket.io";
 import { authMiddleware } from "./middleware/auth"; // Importa il middleware
+import { registerLeagueRoutes } from "./routes/leagues/index";
 import { registerAuctionSocket } from "./socket/auction";
 
 dotenv.config();
@@ -21,6 +22,7 @@ const io = new SocketIOServer(server.server, {
 });
 
 registerAuctionSocket(io);
+registerLeagueRoutes(server);
 
 // Rotta pubblica
 server.get("/", async (req, reply) => {
