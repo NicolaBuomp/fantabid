@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../../../core/supabase.service';
@@ -16,7 +16,8 @@ import { SupabaseService } from '../../../core/supabase.service';
         <label class="block">
           <span class="mb-1 block text-sm font-medium">Email</span>
           <input
-            [(ngModel)]="email"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
             name="email"
             type="email"
             required
@@ -27,7 +28,8 @@ import { SupabaseService } from '../../../core/supabase.service';
         <label class="block">
           <span class="mb-1 block text-sm font-medium">Password</span>
           <input
-            [(ngModel)]="password"
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
             name="password"
             type="password"
             required
@@ -37,14 +39,16 @@ import { SupabaseService } from '../../../core/supabase.service';
 
         <button
           type="submit"
-          [disabled]="loading"
+          [disabled]="loading()"
           class="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60"
         >
-          {{ loading ? 'Accesso...' : 'Accedi' }}
+          {{ loading() ? 'Accesso...' : 'Accedi' }}
         </button>
       </form>
 
-      <p *ngIf="message" class="mt-4 text-sm">{{ message }}</p>
+      @if (message()) {
+        <p class="mt-4 text-sm">{{ message() }}</p>
+      }
 
       <div class="mt-6 flex gap-4 text-sm">
         <a routerLink="/signup" class="underline">Crea account</a>
@@ -57,28 +61,28 @@ export class LoginPageComponent {
   private readonly supabaseService = inject(SupabaseService);
   private readonly router = inject(Router);
 
-  email = '';
-  password = '';
-  loading = false;
-  message = '';
+  email = signal('');
+  password = signal('');
+  loading = signal(false);
+  message = signal('');
 
   onSubmit() {
-    this.loading = true;
-    this.message = '';
+    this.loading.set(true);
+    this.message.set('');
 
-    this.supabaseService.signIn(this.email, this.password).subscribe({
+    this.supabaseService.signIn(this.email(), this.password()).subscribe({
       next: ({ error }) => {
-        this.loading = false;
+        this.loading.set(false);
         if (error) {
-          this.message = error.message;
+          this.message.set(error.message);
           return;
         }
 
         this.router.navigateByUrl('/dashboard');
       },
       error: (error: unknown) => {
-        this.loading = false;
-        this.message = String(error);
+        this.loading.set(false);
+        this.message.set(String(error));
       },
     });
   }

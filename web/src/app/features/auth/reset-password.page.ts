@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { SupabaseService } from '../../../core/supabase.service';
@@ -16,7 +16,8 @@ import { SupabaseService } from '../../../core/supabase.service';
         <label class="block">
           <span class="mb-1 block text-sm font-medium">Email</span>
           <input
-            [(ngModel)]="email"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
             name="email"
             type="email"
             required
@@ -26,14 +27,16 @@ import { SupabaseService } from '../../../core/supabase.service';
 
         <button
           type="submit"
-          [disabled]="loading"
+          [disabled]="loading()"
           class="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60"
         >
-          {{ loading ? 'Invio...' : 'Invia link reset' }}
+          {{ loading() ? 'Invio...' : 'Invia link reset' }}
         </button>
       </form>
 
-      <p *ngIf="message" class="mt-4 text-sm">{{ message }}</p>
+      @if (message()) {
+        <p class="mt-4 text-sm">{{ message() }}</p>
+      }
 
       <div class="mt-6 text-sm">
         <a routerLink="/login" class="underline">Torna al login</a>
@@ -44,22 +47,22 @@ import { SupabaseService } from '../../../core/supabase.service';
 export class ResetPasswordPageComponent {
   private readonly supabaseService = inject(SupabaseService);
 
-  email = '';
-  loading = false;
-  message = '';
+  email = signal('');
+  loading = signal(false);
+  message = signal('');
 
   onSubmit() {
-    this.loading = true;
-    this.message = '';
+    this.loading.set(true);
+    this.message.set('');
 
-    this.supabaseService.resetPassword(this.email).subscribe({
+    this.supabaseService.resetPassword(this.email()).subscribe({
       next: ({ error }) => {
-        this.loading = false;
-        this.message = error ? error.message : 'Email inviata. Controlla la tua casella di posta.';
+        this.loading.set(false);
+        this.message.set(error ? error.message : 'Email inviata. Controlla la tua casella di posta.');
       },
       error: (error: unknown) => {
-        this.loading = false;
-        this.message = String(error);
+        this.loading.set(false);
+        this.message.set(String(error));
       },
     });
   }

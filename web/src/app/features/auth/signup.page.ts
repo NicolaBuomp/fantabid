@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SupabaseService } from '../../../core/supabase.service';
@@ -16,7 +16,8 @@ import { SupabaseService } from '../../../core/supabase.service';
         <label class="block">
           <span class="mb-1 block text-sm font-medium">Username</span>
           <input
-            [(ngModel)]="username"
+            [ngModel]="username()"
+            (ngModelChange)="username.set($event)"
             name="username"
             required
             class="theme-surface w-full rounded border px-3 py-2"
@@ -26,7 +27,8 @@ import { SupabaseService } from '../../../core/supabase.service';
         <label class="block">
           <span class="mb-1 block text-sm font-medium">Email</span>
           <input
-            [(ngModel)]="email"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
             name="email"
             type="email"
             required
@@ -37,7 +39,8 @@ import { SupabaseService } from '../../../core/supabase.service';
         <label class="block">
           <span class="mb-1 block text-sm font-medium">Password</span>
           <input
-            [(ngModel)]="password"
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
             name="password"
             type="password"
             required
@@ -47,14 +50,16 @@ import { SupabaseService } from '../../../core/supabase.service';
 
         <button
           type="submit"
-          [disabled]="loading"
+          [disabled]="loading()"
           class="rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-60"
         >
-          {{ loading ? 'Creazione...' : 'Crea account' }}
+          {{ loading() ? 'Creazione...' : 'Crea account' }}
         </button>
       </form>
 
-      <p *ngIf="message" class="mt-4 text-sm">{{ message }}</p>
+      @if (message()) {
+        <p class="mt-4 text-sm">{{ message() }}</p>
+      }
 
       <div class="mt-6 text-sm">
         <a routerLink="/login" class="underline">Hai già un account? Login</a>
@@ -66,21 +71,21 @@ export class SignupPageComponent {
   private readonly supabaseService = inject(SupabaseService);
   private readonly router = inject(Router);
 
-  username = '';
-  email = '';
-  password = '';
-  loading = false;
-  message = '';
+  username = signal('');
+  email = signal('');
+  password = signal('');
+  loading = signal(false);
+  message = signal('');
 
   onSubmit() {
-    this.loading = true;
-    this.message = '';
+    this.loading.set(true);
+    this.message.set('');
 
-    this.supabaseService.signUp(this.email, this.password, this.username).subscribe({
+    this.supabaseService.signUp(this.email(), this.password(), this.username()).subscribe({
       next: ({ data, error }) => {
-        this.loading = false;
+        this.loading.set(false);
         if (error) {
-          this.message = error.message;
+          this.message.set(error.message);
           return;
         }
 
@@ -89,12 +94,12 @@ export class SignupPageComponent {
           return;
         }
 
-        this.message = "Account creato. Controlla la mail per confermare l'accesso.";
+        this.message.set("Account creato. Controlla la mail per confermare l'accesso.");
         this.router.navigateByUrl('/login');
       },
       error: (error: unknown) => {
-        this.loading = false;
-        this.message = String(error);
+        this.loading.set(false);
+        this.message.set(String(error));
       },
     });
   }
