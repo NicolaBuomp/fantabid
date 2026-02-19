@@ -90,7 +90,7 @@
 
 ### 1.1 Database Migration
 
-- [ ] Eseguire SQL in ordine (vedi `DATABASE_SCHEMA.md` §7 Migration Order):
+- [x] Eseguire SQL in ordine (vedi `DATABASE_SCHEMA.md` §7 Migration Order):
   1. Extensions (`pg_trgm`)
   2. Enums (tutti i `CREATE TYPE`)
   3. Tabella `profiles`
@@ -98,12 +98,12 @@
   5. Tabella `league_members`
   6. Tabella `players`
   7. Tabella `auction_logs`
-- [ ] Creare tutti gli indici
-- [ ] Abilitare RLS su tutte le tabelle
-- [ ] Creare tutte le RLS policies (vedi `DATABASE_SCHEMA.md` §3)
-- [ ] Creare funzione + trigger `handle_new_user` (auto-creazione profilo)
-- [ ] Creare funzione `sell_player` (transazione vendita)
-- [ ] Creare funzione `rollback_last_sale` (transazione rollback)
+- [x] Creare tutti gli indici
+- [x] Abilitare RLS su tutte le tabelle
+- [x] Creare tutte le RLS policies (vedi `DATABASE_SCHEMA.md` §3)
+- [x] Creare funzione + trigger `handle_new_user` (auto-creazione profilo)
+- [x] Creare funzione `sell_player` (transazione vendita)
+- [x] Creare funzione `rollback_last_sale` (transazione rollback)
 - [ ] **Test:** creare utente da dashboard Supabase → verificare che `profiles` si popola
 
 ### 1.2 Backend — JWT Middleware
