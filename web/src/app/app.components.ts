@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { SupabaseService } from '../core/supabase.service';
+import { ThemeMode, ThemeService } from '../core/theme.service';
 import { environment } from '../environments/environment';
 
 @Component({
@@ -10,7 +11,13 @@ import { environment } from '../environments/environment';
   imports: [CommonModule],
   template: `
     <div class="p-10">
-      <h1 class="text-3xl font-bold mb-5">FantaBid Test Console</h1>
+      <div class="mb-5 flex items-center justify-between gap-4">
+        <h1 class="text-3xl font-bold">FantaBid Test Console</h1>
+        <button (click)="toggleTheme()" class="theme-surface rounded border px-4 py-2">
+          Tema: {{ themeModeLabel }}
+          <span *ngIf="themeMode === 'auto'"> ({{ isDarkTheme ? 'Scuro' : 'Chiaro' }})</span>
+        </button>
+      </div>
 
       <div class="mb-5">
         Status:
@@ -40,18 +47,32 @@ import { environment } from '../environments/environment';
         </button>
       </div>
 
-      <div class="bg-gray-100 p-4 rounded border border-gray-300">
+      <div class="theme-surface p-4 rounded border">
         <h3 class="font-bold">Risposta Server:</h3>
         <pre class="whitespace-pre-wrap">{{ apiResponse | json }}</pre>
       </div>
     </div>
   `,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   supabase = inject(SupabaseService);
   http = inject(HttpClient);
+  theme = inject(ThemeService);
 
   apiResponse: any = 'Nessuna chiamata effettuata';
+  isDarkTheme = false;
+  themeMode: ThemeMode = 'auto';
+
+  get themeModeLabel(): string {
+    if (this.themeMode === 'light') return 'Chiaro';
+    if (this.themeMode === 'dark') return 'Scuro';
+    return 'Sistema';
+  }
+
+  ngOnInit(): void {
+    this.theme.initializeTheme();
+    this.syncThemeUi();
+  }
 
   // Dati fake per il test
   testEmail = 'test@fantabid.com';
@@ -85,5 +106,15 @@ export class AppComponent {
 
   logout() {
     this.supabase.signOut().subscribe(() => (this.apiResponse = 'Logged out'));
+  }
+
+  toggleTheme() {
+    this.theme.toggleMode();
+    this.syncThemeUi();
+  }
+
+  private syncThemeUi() {
+    this.themeMode = this.theme.getMode();
+    this.isDarkTheme = this.theme.getResolvedTheme() === 'dark';
   }
 }

@@ -1,1 +1,81 @@
 @use 'tailwindcss';
+
+@theme {
+  --color-custom-slate-50: #f8fafc;
+  --color-custom-slate-100: #f1f5f9;
+  --color-custom-slate-200: #e2e8f0;
+  --color-custom-slate-300: #cbd5e1;
+  --color-custom-slate-400: #94a3b8;
+  --color-custom-slate-500: #64748b;
+  --color-custom-slate-600: #475569;
+  --color-custom-slate-700: #334155;
+  --color-custom-slate-800: #1e293b;
+  --color-custom-slate-900: #0f172a;
+
+  --color-brand-light: #a5b4fc;
+  --color-brand: #6366f1;
+  --color-brand-dark: #4f46e5;
+  --color-brand-deep: #3730a3;
+  --color-brand-indigo-900: #312e81;
+
+  --color-success: #16a34a;
+  --color-success-emerald: #10b981;
+  --color-success-teal: #34d399;
+  --color-success-green: #22c55e;
+
+  --color-warning: #ca8a04;
+
+  --color-danger: #dc2626;
+  --color-danger-light: #f87171;
+  --color-danger-dark: #7f1d1d;
+  --color-danger-vibrant: #ef4444;
+
+  --color-overlay-slate-800-50: rgba(30, 41, 59, 0.5);
+  --color-overlay-slate-900-50: rgba(15, 23, 42, 0.5);
+  --color-overlay-blue-30: rgba(59, 130, 246, 0.3);
+  --color-overlay-indigo-30: rgba(99, 102, 241, 0.3);
+  --color-overlay-red-dark-30: rgba(127, 29, 29, 0.3);
+}
+
+@layer base {
+  :root {
+    --app-bg: #f8fafc;
+    --app-fg: #0f172a;
+    --app-surface: #ffffff;
+    --app-border: #e2e8f0;
+    color-scheme: light;
+  }
+
+  [data-theme='dark'] {
+    --app-bg: #0f172a;
+    --app-fg: #cbd5e1;
+    --app-surface: #1e293b;
+    --app-border: #334155;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--app-bg);
+    color: var(--app-fg);
+  }
+
+  .theme-surface {
+    background-color: var(--app-surface);
+    border-color: var(--app-border);
+  }
+}
+
+@layer utilities {
+  .bg-gradient-diamond-emerald {
+    background: radial-gradient(circle farthest-side at center, #34d399 0%, transparent 100%);
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  }
+
+  .bg-gradient-radial-dark {
+    background: radial-gradient(circle, #1e293b 0%, #0f172a 100%);
+  }
+
+  .bg-gradient-rainbow {
+    background: linear-gradient(to right, #ef4444, #eab308, #22c55e, #3b82f6, #6366f1);
+  }
+}
