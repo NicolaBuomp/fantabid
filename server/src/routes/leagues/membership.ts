@@ -302,4 +302,76 @@ export async function registerLeagueMembershipRoutes(server: FastifyInstance) {
       return reply.send({ membership: updatedMembership });
     },
   );
+
+  // DELETE /api/leagues/:id/members/:memberId - Remove member (admin only)
+  server.delete(
+    "/api/leagues/:id/members/:memberId",
+    { preHandler: [authMiddleware] },
+    async (request, reply) => {
+      if (!request.user) {
+        return reply.code(401).send({ error: "UNAUTHORIZED" });
+      }
+
+      const parsedParams = leagueMemberParamsSchema.safeParse(request.params);
+      if (!parsedParams.success) {
+        return reply.code(400).send({
+          error: "VALIDATION_ERROR",
+          details: parsedParams.error.issues,
+        });
+      }
+
+      const { id: leagueId, memberId } = parsedParams.data;
+
+      const { data: league, error: leagueError } = await supabaseAdmin
+        .from("leagues")
+        .select("id, admin_id")
+        .eq("id", leagueId)
+        .single();
+
+      if (leagueError || !league) {
+        return reply.code(404).send({ error: "LEAGUE_NOT_FOUND" });
+      }
+
+      if (league.admin_id !== request.user.id) {
+        return reply.code(403).send({ error: "FORBIDDEN_ADMIN_ONLY" });
+      }
+
+      const { data: membership, error: membershipError } = await supabaseAdmin
+        .from("league_members")
+        .select("id, league_id, user_id, role, status, joined_at")
+        .eq("id", memberId)
+        .eq("league_id", leagueId)
+        .single();
+
+      if (membershipError || !membership) {
+        return reply.code(404).send({ error: "MEMBER_NOT_FOUND" });
+      }
+
+      if (membership.role === "ADMIN") {
+        return reply.code(400).send({ error: "CANNOT_REMOVE_ADMIN" });
+      }
+
+      const { error: deleteError } = await supabaseAdmin
+        .from("league_members")
+        .delete()
+        .eq("id", membership.id)
+        .eq("league_id", leagueId);
+
+      if (deleteError) {
+        request.log.error({ err: deleteError }, "Failed to remove member");
+
+        if (deleteError.code === "23503") {
+          return reply.code(409).send({
+            error: "MEMBER_REMOVE_CONFLICT",
+            message:
+              "Member cannot be removed because related records still reference it",
+          });
+        }
+
+        return reply.code(500).send({ error: "MEMBER_REMOVE_FAILED" });
+      }
+
+      return reply.send({ removed: true, memberId: membership.id });
+    },
+  );
 }

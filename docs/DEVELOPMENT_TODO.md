@@ -158,24 +158,25 @@
   - [x] Se APPROVAL → status = PENDING
 - [x] `POST /api/leagues/:id/members/:memberId/approve` — Approva membro
 - [x] `POST /api/leagues/:id/members/:memberId/reject` — Rifiuta membro
+- [x] `DELETE /api/leagues/:id/members/:memberId` — Rimuovi membro
 - [ ] **Test:** creare lega → join con altro utente → approve → lista membri = 2
 
 ### 2.2 Angular — Dashboard & League Setup
 
-- [ ] Dashboard (`/`)
-  - [ ] Lista "Le tue leghe" (card con nome, mode, status, num membri)
-  - [ ] Bottone "Crea Lega" → modale/pagina di creazione
-  - [ ] Bottone "Unisciti a Lega" → input codice/ricerca
-- [ ] Creazione lega
-  - [ ] Form: nome, modalità (Classic/Mantra), tipo accesso, password (opzionale)
-  - [ ] Settings avanzati: budget, timer, roster limits
-- [ ] Lobby (`/league/:id/lobby`)
-  - [ ] Lista membri con stato (PENDING/APPROVED)
-  - [ ] Se admin: bottoni Approva/Rifiuta
-  - [ ] Se user pending: messaggio "In attesa di approvazione"
+- [x] Dashboard (`/`)
+  - [x] Lista "Le tue leghe" (card con nome, mode, status, num membri)
+  - [x] Bottone "Crea Lega" → modale/pagina di creazione
+  - [x] Bottone "Unisciti a Lega" → input codice/ricerca
+- [x] Creazione lega
+  - [x] Form: nome, modalità (Classic/Mantra), tipo accesso, password (opzionale)
+  - [x] Settings avanzati: budget, timer, roster limits
+- [x] Lobby (`/league/:id/lobby`)
+  - [x] Lista membri con stato (PENDING/APPROVED)
+  - [x] Se admin: bottoni Approva/Rifiuta
+  - [x] Se user pending: messaggio "In attesa di approvazione"
 - [ ] Setup (`/league/:id/setup`) — Solo Admin
-  - [ ] Gestione membri (lista, approva, rifiuta, rimuovi)
-  - [ ] Modifica settings lega
+  - [x] Gestione membri (lista, approva, rifiuta, rimuovi)
+  - [x] Modifica settings lega
   - [ ] Upload listone (→ Fase 3)
 
 ---

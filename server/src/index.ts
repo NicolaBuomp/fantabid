@@ -13,7 +13,11 @@ const corsOrigins = process.env.CORS_ORIGINS
   ? process.env.CORS_ORIGINS.split(",").map((origin) => origin.trim())
   : ["http://localhost:4200"];
 
-server.register(cors, { origin: corsOrigins });
+server.register(cors, {
+  origin: corsOrigins,
+  methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+});
 
 const io = new SocketIOServer(server.server, {
   cors: {
