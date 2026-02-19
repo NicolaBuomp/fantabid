@@ -18,12 +18,12 @@ FantaBid gestisce aste di fantacalcio con rilanci in tempo reale, timer intellig
 ## Architettura
 
 ```
-┌──────────────┐     ┌──────────────────┐
-│  Angular     │     │  Flutter         │
-│  (Web)       │     │  (iOS/Android)   │
-└──────┬───────┘     └────────┬─────────┘
-       │  HTTPS + WSS        │  HTTPS + WSS
-       ▼                     ▼
+┌──────────────┐
+│  Angular     │
+│  (Web)       │
+└──────┬───────┘
+  │  HTTPS + WSS
+  ▼
 ┌─────────────────────────────────────────┐
 │  Node.js Server (Fly.io)               │
 │  Fastify (REST) + Socket.io (Real-time)│
@@ -41,7 +41,6 @@ FantaBid gestisce aste di fantacalcio con rilanci in tempo reale, timer intellig
 fantabid/
 ├── server/          # Node.js — Fastify + Socket.io
 ├── web/             # Angular 18+ — interfaccia admin-first
-├── mobile/          # Flutter 3.24+ — interfaccia player-first
 ├── docs/            # Documentazione architetturale
 │   ├── ARCHITECTURE.md
 │   ├── DATABASE_SCHEMA.md
@@ -52,13 +51,14 @@ fantabid/
 
 ## Tech Stack
 
-| Componente   | Tecnologie                                                     |
-| ------------ | -------------------------------------------------------------- |
-| **Backend**  | Node.js 20+, Fastify 5+, Socket.io 4+, Zod, SheetJS            |
-| **Web**      | Angular 18+, Tailwind CSS, NgRx Signals, TanStack Query        |
-| **Mobile**   | Flutter 3.24+, Riverpod, Dio, GoRouter                         |
-| **Database** | Supabase (PostgreSQL 15+, Auth, Storage)                       |
-| **Deploy**   | Fly.io (server), Vercel (web), App Store / Play Store (mobile) |
+| Componente   | Tecnologie                                              |
+| ------------ | ------------------------------------------------------- |
+| **Backend**  | Node.js 20+, Fastify 5+, Socket.io 4+, Zod, SheetJS     |
+| **Web**      | Angular 18+, Tailwind CSS, NgRx Signals, TanStack Query |
+| **Database** | Supabase (PostgreSQL 15+, Auth, Storage)                |
+| **Deploy**   | Fly.io (server), Vercel (web)                           |
+
+> Nota roadmap: la versione iniziale è **solo web**. La app mobile verrà implementata in una fase successiva.
 
 ## Setup Locale
 
@@ -66,7 +66,6 @@ fantabid/
 
 - Node.js 20+
 - Angular CLI 18+
-- Flutter SDK 3.24+
 - Account Supabase con progetto creato
 
 ### Variabili d'Ambiente
@@ -94,8 +93,6 @@ export const environment = {
 };
 ```
 
-**Mobile:** configurare tramite `--dart-define` o `.env` con `flutter_dotenv`.
-
 ### Avvio
 
 ```bash
@@ -108,11 +105,6 @@ npm run dev
 cd web
 npm install
 ng serve
-
-# Mobile
-cd mobile
-flutter pub get
-flutter run
 ```
 
 ## Documentazione
